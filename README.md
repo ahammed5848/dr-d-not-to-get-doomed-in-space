@@ -345,7 +345,7 @@ Dr D is architected for zero-friction cloud deployment on **Render** via its dec
   - `VITE_WS_URL`: (Optional) Automatically derived from `VITE_API_BASE_URL` converting `https://` to `wss://` on port 443.
 
 ### 3. One-Click Blueprint Deployment via `render.yaml`
-1. Push this repository to GitHub: `https://github.com/<your-username>/dr-d-not-to-get-doomed-in-space`.
+1. Push this repository to GitHub: `https://github.com/ahammed5848/dr-d-not-to-get-doomed-in-space`.
 2. In the [Render Dashboard](https://dashboard.render.com), click **New +** -> **Blueprint**.
 3. Connect your `dr-d-not-to-get-doomed-in-space` GitHub repository.
 4. Render automatically parses `render.yaml`, provisions the backend Web Service and frontend Static Site, links environment variables, and launches both services.

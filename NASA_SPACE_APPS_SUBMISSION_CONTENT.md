@@ -312,3 +312,18 @@ In compliance with NASA Space Apps Challenge Super Intelligence & AI usage rules
   - **Path to Flight Readiness:** Integration with flight-certified wearable biosensors (CSA Bio-Monitor), offline quantized Small Language Models (Med-Gemma), and planetary surface gravity transition protocols.
 - **Visual Elements:** Mobile handheld viewport screenshot, technical report preview (`docs/DrD_Project_Report.pdf`), and summary roadmap.
 - **Presenter Explanation:** "Dr D transforms deep space medicine from reactive ground triage to proactive onboard guardianship. Tested, verified, and scientifically grounded, Dr D is ready to protect the next generation of space explorers."
+
+---
+
+## SECTION H: PROJECT REPOSITORY & CLOUD DEPLOYMENT LINKS
+- **GitHub Source Code Repository:** [https://github.com/ahammed5848/dr-d-not-to-get-doomed-in-space](https://github.com/ahammed5848/dr-d-not-to-get-doomed-in-space)
+- **Deployment Platform:** Render Cloud (Declarative Blueprint: `render.yaml`)
+- **Backend Web Service (FastAPI):** `https://dr-d-backend.onrender.com`
+- **Frontend Mission Control UI (React 18):** `https://dr-d-frontend.onrender.com`
+- **Interactive REST API Documentation:** `https://dr-d-backend.onrender.com/docs`
+- **Default Branch:** `main`
+- **Public Demonstration Credentials:**
+  - Flight Surgeon (Full Access): `surgeon` / `Password123!`
+  - Mission Commander: `schen` / `Password123!`
+  - Flight Engineer: `erostova` / `Password123!`
+
