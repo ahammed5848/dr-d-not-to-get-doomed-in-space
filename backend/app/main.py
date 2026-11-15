@@ -27,7 +27,6 @@ async def lifespan(app: FastAPI):
 
     # Launch background simulation engine loop (unless in testing mode)
     global simulator_task
-    import os
     if os.getenv("TESTING") != "1":
         simulator_task = asyncio.create_task(simulator.run_loop())
 
@@ -116,4 +115,4 @@ if __name__ == "__main__":
         port = int(raw_port)
     except (ValueError, TypeError):
         port = 8000
-    uvicorn.run("app.main:app", host="0.0.0.0", port=port)
+    uvicorn.run(app, host="0.0.0.0", port=port)

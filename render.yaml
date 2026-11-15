@@ -8,11 +8,13 @@ services:
     plan: free
     rootDir: backend
     buildCommand: pip install -r requirements.txt
-    startCommand: python -m app.main
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.8
+      - key: PYTHONUNBUFFERED
+        value: "1"
       - key: ENVIRONMENT
         value: production
       - key: DR_D_SECRET_KEY
