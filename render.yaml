@@ -11,6 +11,8 @@ services:
     startCommand: python -m app.main
     healthCheckPath: /
     envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.8
       - key: ENVIRONMENT
         value: production
       - key: DR_D_SECRET_KEY
