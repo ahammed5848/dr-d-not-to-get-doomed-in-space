@@ -303,12 +303,53 @@ python -m pytest -v
 
 ---
 
-## 20. Public Deployment Instructions
-Dr D is fully containerizable and deployable to edge hardware or cloud virtual machines:
-1. **Frontend Static Build:** `cd frontend && npm run build` (outputs optimized production bundle to `frontend/dist`).
-2. **Reverse Proxy Setup:** Configure NGINX or Caddy to serve `frontend/dist` and proxy `/api` and `/ws` to `127.0.0.1:8000`.
-3. **Process Management:** Run backend via `gunicorn app.main:app -w 2 -k uvicorn.workers.UvicornWorker` or systemd.
-4. **Environment Variables:** Set `DR_D_SECRET_KEY`, `DR_D_DB_URL`, `DR_D_HOST`, and `DR_D_PORT` via environment variables.
+## 20. Production Cloud Deployment (Render & GitHub)
+Dr D is architected for zero-friction cloud deployment on **Render** via its declarative **Blueprint (`render.yaml`)**:
+
+### Architecture Overview
+```
+[ User Browser / Evaluators ]
+          |
+          +---> https://dr-d-frontend.onrender.com (Render Static Site: React 18 + Vite)
+          |        |
+          |     (REST API / WebSocket: WSS)
+          |        v
+          +---> https://dr-d-backend.onrender.com (Render Web Service: FastAPI + Uvicorn)
+                   |
+                (SQLAlchemy ORM)
+                   v
+             [ SQLite / PostgreSQL Database ]
+```
+
+### 1. Render Web Service (FastAPI Backend)
+- **Service Type:** Web Service (Python 3.11+)
+- **Root Directory:** `backend`
+- **Build Command:** `pip install -r requirements.txt`
+- **Start Command:** `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
+- **Health Check Path:** `/` (returns JSON status `{ "status": "healthy" }`)
+- **Required Environment Variables:**
+  - `DR_D_SECRET_KEY`: High-entropy cryptographic JWT key (generated automatically by Render Blueprint)
+  - `ENVIRONMENT`: `production`
+  - `ALLOWED_ORIGINS`: Deployed frontend origin (e.g., `https://dr-d-frontend.onrender.com,http://localhost:5173`)
+  - `DR_D_DB_URL`: SQLite (`sqlite:///./dr_d.db`) or managed PostgreSQL connection string (`postgresql://...`)
+
+### 2. Render Static Site (React 18 Frontend)
+- **Service Type:** Static Site
+- **Root Directory:** `frontend`
+- **Build Command:** `npm install && npm run build`
+- **Publish Directory:** `dist`
+- **Single Page Application (SPA) Rewrite:**
+  - Configured via `frontend/public/_redirects` (`/*  /index.html  200`) and `render.yaml` `routes` rewrite rule.
+- **Required Environment Variables:**
+  - `VITE_API_BASE_URL`: Full URL of the deployed FastAPI backend (e.g. `https://dr-d-backend.onrender.com`).
+  - `VITE_WS_URL`: (Optional) Automatically derived from `VITE_API_BASE_URL` converting `https://` to `wss://` on port 443.
+
+### 3. One-Click Blueprint Deployment via `render.yaml`
+1. Push this repository to GitHub: `https://github.com/<your-username>/dr-d-not-to-get-doomed-in-space`.
+2. In the [Render Dashboard](https://dashboard.render.com), click **New +** -> **Blueprint**.
+3. Connect your `dr-d-not-to-get-doomed-in-space` GitHub repository.
+4. Render automatically parses `render.yaml`, provisions the backend Web Service and frontend Static Site, links environment variables, and launches both services.
+5. Every future `git push origin main` triggers an automatic zero-downtime redeployment.
 
 ---
 
