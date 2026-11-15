@@ -1,0 +1,39 @@
+# Render Blueprint for Dr D — Astronaut Health Intelligence System
+# Deploys the FastAPI Backend (Web Service) and React Vite Frontend (Static Site)
+services:
+  - type: web
+    name: dr-d-backend
+    runtime: python
+    region: oregon
+    plan: free
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: ENVIRONMENT
+        value: production
+      - key: DR_D_SECRET_KEY
+        generateValue: true
+      - key: ALLOWED_ORIGINS
+        value: https://dr-d-not-to-get-doomed-in-space.onrender.com,http://localhost:5173
+      - key: TESTING
+        value: "0"
+
+  - type: web
+    name: dr-d-frontend
+    runtime: static
+    region: oregon
+    plan: free
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    publishDir: dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_BASE_URL
+        value: https://dr-d-backend.onrender.com
