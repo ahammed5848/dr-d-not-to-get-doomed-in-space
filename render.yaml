@@ -18,7 +18,7 @@ services:
       - key: DR_D_SECRET_KEY
         generateValue: true
       - key: ALLOWED_ORIGINS
-        value: https://dr-d-not-to-get-doomed-in-space.onrender.com,http://localhost:5173
+        value: https://dr-d-not-to-get-doomed-in-space.onrender.com,https://dr-d-frontend.onrender.com,http://localhost:5173
       - key: TESTING
         value: "0"
 
@@ -29,7 +29,7 @@ services:
     plan: free
     rootDir: frontend
     buildCommand: npm install && npm run build
-    publishDir: dist
+    staticPublishPath: ./dist
     routes:
       - type: rewrite
         source: /*
