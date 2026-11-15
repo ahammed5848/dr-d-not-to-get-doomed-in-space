@@ -68,18 +68,6 @@ app.include_router(reports.router)
 app.include_router(websocket.router)
 app.include_router(research.router)
 
-@app.get("/", tags=["Health"])
-def health_check():
-    return {
-        "status": "healthy",
-        "service": "Dr D — Astronaut Health Monitoring System API",
-        "version": "1.0.0",
-        "environment": settings.ENVIRONMENT,
-        "mission": settings.MISSION_NAME,
-        "phase": settings.MISSION_PHASE,
-        "docs": "/docs"
-    }
-
 @app.get("/api/mission", response_model=MissionInfoResponse, tags=["Mission Context"])
 def get_mission_info(db: Session = Depends(get_db)):
     m = db.query(MissionInfo).first()
@@ -108,11 +96,23 @@ def get_mission_info(db: Session = Depends(get_db)):
     )
 
 @app.get("/", tags=["Health"])
-def root():
+def health_check():
     return {
-        "system": "Dr D — Astronaut Health Monitoring System",
-        "status": "OPERATIONAL",
-        "mission": "Ares-V Mars Transit",
+        "status": "healthy",
+        "service": "Dr D — Astronaut Health Monitoring System API",
+        "version": "1.0.0",
+        "environment": settings.ENVIRONMENT,
+        "mission": settings.MISSION_NAME,
+        "phase": settings.MISSION_PHASE,
         "docs": "/docs",
         "websocket": "/ws/live"
     }
+
+if __name__ == "__main__":
+    import uvicorn
+    raw_port = os.environ.get("PORT", "8000")
+    try:
+        port = int(raw_port)
+    except (ValueError, TypeError):
+        port = 8000
+    uvicorn.run("app.main:app", host="0.0.0.0", port=port)
